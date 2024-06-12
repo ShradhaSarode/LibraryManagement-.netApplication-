@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LibraryManagement.Models.Book>
+
+@{
+    ViewData["Title"] = "BookList";
+}
+
+<div class="d-flex justify-content-center mb-3">
+    <form asp-action="BookList" method="get" class="form-inline d-flex align-items-center">
+        <div class="form-group mb-2">
+            <input type="text" name="searchTerm" class="form-control small-search-box" placeholder="Search Book..." value="@ViewBag.SearchTerm" />
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 ml-2">Search</button>
+    </form>
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-2 mb-3">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@Url.Content(item.CoverImage)" alt="@item.Title" style="height: 200px; style="width: 50px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text"><strong>Price:</strong> @item.Price</p>
+                        <p class="card-text"><strong>PublishedYear:</strong> @item.PublishedYear</p>
+                        <div>
+                            <a href="@Url.Action("Details", "Book", new { id = item.BookID })" class="btn btn-primary">View More</a>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        }
+    </div>
+</div>

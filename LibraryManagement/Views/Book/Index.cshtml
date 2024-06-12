@@ -1,0 +1,86 @@
+﻿@model IEnumerable<LibraryManagement.Models.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Books List</h1>
+
+<p>
+    <a asp-action="Create">Add New Book</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BookID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.AuthorID) *@
+                AuthorName
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.PublishedYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoverImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.CategoryId) *@
+                CategoryName
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Categoryname)
+            </th> *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.AuthorID)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublishedYear)
+            </td>
+            <td>
+                @* @Html.DisplayFor(modelItem => item.CoverImage) *@
+                    <img src="@Url.Content(item.CoverImage)" height="150" width="200" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.CategoryId)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoryname)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.BookID }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.BookID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.BookID  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

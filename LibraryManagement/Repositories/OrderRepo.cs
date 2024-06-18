@@ -31,7 +31,7 @@ namespace LibraryManagement.Repositories
                                            {
                                                OrderItemID = item.OrderItemID,
                                                OrderId = item.OrderId,
-                                               ProductId = item.ProductId,
+                                               BookID = item.BookID,
                                                OrderStatusId = item.OrderStatusId,
                                                Quantity = item.Quantity,
                                                Price = item.Price,
@@ -46,4 +46,5 @@ namespace LibraryManagement.Repositories
             return orders.ToList();
         }
     }
-}
+    }
+

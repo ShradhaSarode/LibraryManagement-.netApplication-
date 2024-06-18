@@ -11,7 +11,7 @@ namespace LibraryManagement.Models
 
         public int OrderId { get; set; }
 
-        public int ProductId { get; set; }
+        public int BookID { get; set; }
         public int OrderStatusId { get; set; }
         public int Quantity { get; set; }
 

@@ -10,10 +10,8 @@ namespace LibraryManagement.Repositories
 
         public int RemoveFromCart(int id);
 
-        // public BookCart ConfirmOrder(int id);
-
-        // public int PlaceOrder(Orders order);
-
+        public BookCart ConfirmOrder(int id);
+        public int PlaceOrder(Orders order);
         public int RemoveFromCartAfterOrder(int userid, int bookid);
 
         public int GetCartCount(int userid);

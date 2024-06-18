@@ -28,7 +28,24 @@
                             <a href="@Url.Action("Details", "Book", new { id = item.BookID })" class="btn btn-primary">View More</a>
                         </div>
                     </div>
-                  
+
+                    <div class="my-2 text-center">
+                        @if (item.Stock > 0)
+                        {
+                            <p class="text-success bg-light p-2 rounded"><strong>Stock Available</strong></p>
+                        }
+                        else
+                        {
+                            <p class="text-danger bg-light p-2 rounded"><strong>Stock Unavailable</strong></p>
+                        }
+                    </div>
+                    <div class="mt-auto">
+                        @if (item.Stock <= 0)
+                        {
+                            <button type="button" class="btn btn-secondary w-100" disabled>Notify Me</button>
+                        }
+                    </div>
+
                 </div>
             </div>
         }

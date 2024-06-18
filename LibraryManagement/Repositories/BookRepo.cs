@@ -43,8 +43,9 @@ namespace LibraryManagement.Repositories
                 model.CoverImage = b.CoverImage;
                 model.Price = b.Price;
                 model.CategoryId = b.CategoryId;
+                model.Stock = b.Stock;
                 //model.Author = b.Author;
-               
+
                 result = db.SaveChanges();
             }
             return result;
@@ -83,7 +84,8 @@ namespace LibraryManagement.Repositories
                              CoverImage = b.CoverImage,
                              Price = b.Price,
                              CategoryId = b.CategoryId,
-                             Categoryname = c.CategoryName
+                             Categoryname = c.CategoryName,
+                             Stock = b.Stock
                          }).ToList();
             return model;
 

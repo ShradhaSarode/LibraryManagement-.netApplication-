@@ -22,18 +22,7 @@ namespace LibraryManagement.Repositories
             }
             else
             {
-                // If the product already exists in the cart, update its quantity instead
-                var existingCartItem = db.Carts.FirstOrDefault(c => c.UserID == cart.UserID && c.BookID == cart.BookID);
-                if (existingCartItem != null)
-                {
-                    existingCartItem.Quantity += cart.Quantity;
-                    return db.SaveChanges();
-                }
-                else
-                {
-                    // Handle case where the existing cart item is null
-                    return 0;
-                }
+                return 2;
             }
         }
 
@@ -54,6 +43,24 @@ namespace LibraryManagement.Repositories
                 }
             }
             return exists;
+        }
+
+        public BookCart ConfirmOrder(int id)
+        {
+            var result = (from c in db.Carts
+                          join p in db.Books on c.BookID equals p.BookID
+                          where c.CartID == id
+                          select new BookCart
+                          {
+                              BookID = p.BookID,
+                              Title = p.Title,
+                              Price = p.Price,
+                              CoverImage = p.CoverImage,
+                              Quantity = 1,
+                              CartID = c.CartID,
+                              UserID = c.UserID
+                          }).FirstOrDefault();
+            return result;
         }
 
         public int GetCartCount(int userid)
@@ -81,6 +88,12 @@ namespace LibraryManagement.Repositories
                            Quantity = c.Quantity
                        }) .ToList();
             return res;
+        }
+
+        public int PlaceOrder(Orders order)
+        {
+            db.Orders.Add(order);
+            return db.SaveChanges();
         }
 
         public int RemoveFromCart(int id)

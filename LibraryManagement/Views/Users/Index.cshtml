@@ -52,7 +52,7 @@
                @*  @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
-                    <form asp-controller="Users" asp-action="UpdateStatus" method="post">
+                    @* <form asp-controller="Users" asp-action="UpdateStatus" method="post">
                         <input type="hidden" name="userId" value="@item.UserID" />
                         <input type="hidden" name="isActive" value="true" />
                         <button type="submit" class="btn btn-success">Activate</button>
@@ -61,7 +61,19 @@
                         <input type="hidden" name="userId" value="@item.UserID" />
                         <input type="hidden" name="isActive" value="false" />
                         <button type="submit" class="btn btn-danger">Deactivate</button>
+                    </form> *@
+
+                    <form asp-controller="Users" asp-action="UpdateStatus" method="post">
+                        <input type="hidden" name="userId" value="@item.UserID" />
+                        <input type="hidden" name="isActive" value="1" />
+                        <button type="submit" class="btn btn-success">Activate</button>
                     </form>
+                    <form asp-controller="Users" asp-action="UpdateStatus" method="post" style="display:inline-block">
+                        <input type="hidden" name="userId" value="@item.UserID" />
+                        <input type="hidden" name="isActive" value="0" />
+                        <button type="submit" class="btn btn-danger">Deactivate</button>
+                    </form>
+
             </td>
         </tr>
 }

@@ -22,6 +22,11 @@ namespace LibraryManagement.Service
             return repo.CheckIfExists(cart);
         }
 
+        public BookCart ConfirmOrder(int id)
+        {
+            return repo.ConfirmOrder(id);
+        }
+
         public int GetCartCount(int userid)
         {
             return repo.GetCartCount(userid);
@@ -30,6 +35,11 @@ namespace LibraryManagement.Service
         public IEnumerable<BookCart> GetCartItems(int userid)
         {
             return repo.GetCartItems(userid);
+        }
+
+        public int PlaceOrder(Orders order)
+        {
+            return repo.PlaceOrder(order);
         }
 
         public int RemoveFromCart(int id)

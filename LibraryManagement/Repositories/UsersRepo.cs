@@ -37,15 +37,15 @@ namespace LibraryManagement.Repositories
 
         public IEnumerable<Users> GetUsers()
         {
-            //var model = (from u in
-            //                 db.Users
-            //             select u).ToList();
-            //return model;
             var model = (from u in
                              db.Users
-                         where u.IsActive == 1
                          select u).ToList();
             return model;
+            //var model = (from u in
+            //                 db.Users
+            //             where u.IsActive == 1
+            //             select u).ToList();
+            //return model;
         }
 
         public Users UpdateUserStatus(int userId, int isActive)

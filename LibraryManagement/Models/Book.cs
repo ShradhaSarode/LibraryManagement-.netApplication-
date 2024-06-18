@@ -28,6 +28,8 @@ namespace LibraryManagement.Models
         [NotMapped]
         public string? Categoryname { get; set; }
 
-        
+        [Required]
+        public int Stock { get; set; }
+
     }
 }

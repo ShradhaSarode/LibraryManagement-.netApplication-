@@ -10,9 +10,9 @@ namespace LibraryManagement.Service
 
         public int RemoveFromCart(int id);
 
-        // public BookCart ConfirmOrder(int id);
+        public BookCart ConfirmOrder(int id);
 
-        // public int PlaceOrder(Orders order);
+        public int PlaceOrder(Orders order);
 
         public int RemoveFromCartAfterOrder(int userid, int bookid);
 

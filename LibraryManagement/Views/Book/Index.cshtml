@@ -41,7 +41,10 @@
             @* <th>
                 @Html.DisplayNameFor(model => model.Categoryname)
             </th> *@
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -75,6 +78,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Categoryname)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
             <td>
                     @Html.ActionLink("Edit", "Edit", new { id=item.BookID }) |
                     @Html.ActionLink("Details", "Details", new { id=item.BookID }) |

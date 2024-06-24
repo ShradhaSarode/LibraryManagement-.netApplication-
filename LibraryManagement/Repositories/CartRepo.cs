@@ -13,16 +13,55 @@ namespace LibraryManagement.Repositories
         }
         public int AddToCart(Cart cart)
         {
-            bool exists = CheckIfExists(cart);
-            if (!exists)
+            //bool exists = CheckIfExists(cart);
+            //if (!exists)
+            //{
+            //    db.Carts.Add(cart);
+            //    int res = db.SaveChanges();
+            //    return res;
+            //}
+            //else
+            //{
+            //    return 2;
+            //}
+            try
             {
-                db.Carts.Add(cart);
-                int res = db.SaveChanges();
-                return res;
+                var bk = db.Books.FirstOrDefault(p => p.BookID == cart.BookID);
+
+                if (bk != null && bk.Stock >= cart.Quantity && cart.Quantity > 0)
+                {
+                    var existingCartItem = db.Carts.FirstOrDefault(x => x.UserID == cart.UserID && x.BookID == cart.BookID);
+                    if (existingCartItem == null)
+                    {
+                        db.Carts.Add(cart);
+                    }
+                    else
+                    {
+                        existingCartItem.Quantity += cart.Quantity;
+                    }
+                    return db.SaveChanges();
+                }
+                else if (bk == null)
+                {
+                    throw new Exception($"Book with ID {cart.BookID} not found.");
+                }
+                else if (bk.Stock < cart.Quantity)
+                {
+                    throw new Exception($"Insufficient stock for product '{bk.Title}'. Available stock: {bk.Stock}");
+                }
+                else if (cart.Quantity <= 0)
+                {
+                    throw new Exception($"Quantity must be greater than zero.");
+                }
+                else
+                {
+                    throw new Exception("Unknown error occurred while adding to cart.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return 2;
+                // Handle exceptions as per your application's error handling strategy
+                throw new Exception("Failed to add item to cart.", ex);
             }
         }
 
@@ -92,8 +131,45 @@ namespace LibraryManagement.Repositories
 
         public int PlaceOrder(Orders order)
         {
-            db.Orders.Add(order);
-            return db.SaveChanges();
+            //db.Orders.Add(order);
+            //return db.SaveChanges();
+            try
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    var bk = db.Books.FirstOrDefault(p => p.BookID == item.BookID);
+
+                    if (bk != null)
+                    {
+                        // Check if sufficient stock is available
+                        if (bk.Stock >= item.Quantity)
+                        {
+                            // Decrease product stock
+                            bk.Stock -= item.Quantity;
+                        }
+                        else
+                        {
+                            // Insufficient stock, return an error status or message
+                            return -1; // or you can throw an exception here if needed
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Book with ID {item.BookID} not found.");
+                    }
+                }
+
+                // Add order to Orders table
+                db.Orders.Add(order);
+                db.SaveChanges();
+
+                return order.OrderId;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions as per your application's error handling strategy
+                throw new Exception("Failed to place order.", ex);
+            }
         }
 
         public int RemoveFromCart(int id)

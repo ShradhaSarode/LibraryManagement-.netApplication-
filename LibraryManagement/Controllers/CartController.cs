@@ -98,15 +98,15 @@ namespace LibraryManagement.Controllers
                 if (book.Stock <= 0)
                 {
                     // If stock is not available, show a notification message
-                    TempData["NotifyMessage"] = "Stock not available. You will be notified when the product is back in stock.";
-                    return RedirectToAction("ProductList", "Product");
+                    TempData["NotifyMessage"] = "Stock not available. You will be notified when the book is back in stock.";
+                    return RedirectToAction("BookList", "Book");
                 }
 
                 var cart = new Cart
                 {
                     UserID = userId,
                     BookID = bookId,
-
+                    Quantity = 1
                 };
                 var result = cartService.AddToCart(cart);
                 if (result > 0)
@@ -117,7 +117,7 @@ namespace LibraryManagement.Controllers
                 else
                 {
                     // Handle failure to add to cart
-                    ViewBag.ErrorMessage = "Unable to add product to cart. Please try again.";
+                    ViewBag.ErrorMessage = "Unable to add book to cart. Please try again.";
                     return View("Index");
                 }
             }
@@ -209,39 +209,40 @@ namespace LibraryManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult PlaceOrder(int bookId, int quantity, int orderStatusId)
+        public IActionResult placeorder(BookCart bcart)
         {
             try
             {
-                int userId = GetCurrentUserId();
+                int userid = GetCurrentUserId();
 
-                // Retrieve cart items for the user
-                var cartItems = cartService.GetCartItems(userId);
 
-                // Calculate total amount
-                decimal totalAmount = cartItems.Sum(item => item.Price * item.Quantity);
+                // retrieve cart items for the user
+                var cartitems = cartService.GetCartItems(userid);
 
-                // Create new order
+                // calculate total amount
+                decimal totalamount = cartitems.Sum(item => item.Price * item.Quantity);
+
+                // create new order
                 var order = new Orders
                 {
-                    UserId = userId,
+                    UserId = userid,
                     OrderDate = DateTime.Now,
-                    TotalAmount = totalAmount,
-                    OrderItems = cartItems.Select(item => new OrderItems
+                    TotalAmount = totalamount,
+                    OrderItems = cartitems.Select(item => new OrderItems
                     {
                         BookID = item.BookID,
-                        OrderStatusId = orderStatusId,
+                        OrderStatusId = 1,
                         Quantity = item.Quantity,
                         Price = item.Price
                     }).ToList()
                 };
-                // Place the order
+                // place the order
                 cartService.PlaceOrder(order);
 
-                // Clear the cart after order placement
-                foreach (var item in cartItems)
+                // clear the cart after order placement
+                foreach (var item in cartitems)
                 {
-                    cartService.RemoveFromCartAfterOrder(userId, item.BookID);
+                    cartService.RemoveFromCartAfterOrder(userid, item.BookID);
                 }
 
                 return RedirectToAction("OrderSuccess", "Order");
@@ -249,10 +250,11 @@ namespace LibraryManagement.Controllers
 
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = ex.Message;
-                return RedirectToAction("Index", "Cart");
+                ViewBag.errormessage = ex.Message;
+                return RedirectToAction("index", "cart");
             }
         }
+
 
         public IActionResult OrderList()
         {
@@ -274,5 +276,57 @@ namespace LibraryManagement.Controllers
             }
         }
 
+        public IActionResult ListOfOrders()
+        {
+            try
+            {
+                var orders = orderService.GetAllOrders();
+                if (orders == null || !orders.Any())
+                {
+                    ViewBag.ErrorMessage = "No orders found.";
+                    return View("Error");
+                }
+
+                // Fetch order status options
+                var orderStatuses = orderStatusService.GetAllOrderStatus()
+                    .Select(os => new SelectListItem
+                    {
+                        Value = os.OrderStatusId.ToString(),
+                        Text = os.Status
+                    }).ToList();
+
+                ViewBag.OrderStatuses = orderStatuses;
+
+                return View(orders);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderStatus(int orderItemId, int orderStatusId)
+        {
+            try
+            {
+                var result = orderService.UpdateOrderStatus(orderItemId, orderStatusId);
+                if (result > 0)
+                {
+                    return RedirectToAction("ListOfOrders", "Cart");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Order item not found.";
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
     }
 }

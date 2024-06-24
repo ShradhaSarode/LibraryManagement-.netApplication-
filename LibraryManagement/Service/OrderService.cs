@@ -11,9 +11,20 @@ namespace LibraryManagement.Service
         {
             this.repo = repo;
         }
+
+        public IEnumerable<Orders> GetAllOrders()
+        {
+            return repo.GetAllOrders();
+        }
+
         public IEnumerable<Orders> GetOrders(int userId)
         {
             return repo.GetOrders(userId);
+        }
+
+        public int UpdateOrderStatus(int orderItemId, int orderStatusId)
+        {
+            return repo.UpdateOrderStatus(orderItemId, orderStatusId);
         }
     }
 }

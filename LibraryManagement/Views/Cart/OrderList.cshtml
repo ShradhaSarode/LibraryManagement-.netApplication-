@@ -1,0 +1,87 @@
+﻿@model IEnumerable<LibraryManagement.Models.Orders>
+
+@{
+    ViewData["Title"] = "OrderList";
+}
+
+<h1>OrderList</h1>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var order in Model)
+        {
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Order ID: @order.OrderId</h5>
+                        <p class="card-text">Order Date: @order.OrderDate.ToString("dd/MM/yyyy")</p>
+                        <p class="card-text">Total Amount: @order.TotalAmount</p>
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#orderItems-@order.OrderId">
+                            View Details
+                        </button>
+                        <div id="orderItems-@order.OrderId" class="collapse">
+                            <table class="table mt-2">
+                                <thead>
+                                    <tr>
+                                        @*   <th>Product ID</th> *@
+                                        <th>Product Image</th>
+                                        <th>Product Name</th>
+                                        <th>Order Status</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (order.OrderItems != null)
+                                    {
+                                        // Iterate over order items
+                                        @foreach (var item in order.OrderItems)
+                                        {
+                                            <tr>
+                                                @*  <td>@item.ProductId</td> *@
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(item.CoverImage))
+                                                    {
+                                                        @*   <img src="@item.ProductImage" alt="@item.ProductName" style="width: 50px; height: 50px;" /> *@
+                                                        <img class="card-img-top" src="@Url.Content(item.CoverImage)" alt="@item.CoverImage" style="50px; width=50px; object-fit: cover;">
+                                                    }
+                                                </td>
+                                                <td>@item.Title</td>
+                                                <td>@item.OrderStatus.Status</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.Price</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No orders found.</p>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="collapse"]').on('click', function (e) {
+                var target = $(this).data('target');
+                $(target).collapse('toggle');
+            });
+        });
+    </script>
+}

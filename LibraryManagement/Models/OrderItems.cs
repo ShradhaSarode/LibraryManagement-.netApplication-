@@ -21,10 +21,15 @@ namespace LibraryManagement.Models
         [ForeignKey("OrderId")]
         public Orders Order { get; set; }
 
-        [ForeignKey("ProductId")]
+        [ForeignKey("BookID")]
         public Book Book { get; set; }
 
         [ForeignKey("OrderStatusId")]
         public OrderStatus OrderStatus { get; set; }
+
+        [NotMapped]
+        public string Title { get; set; }
+        [NotMapped]
+        public string CoverImage { get; set; }
     }
 }

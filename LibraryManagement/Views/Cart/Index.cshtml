@@ -3,69 +3,41 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h1>Index</h1>
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="@Url.Content(item.CoverImage)" alt="@item.Title" style="height: 300px;  object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">Price: @item.Price</p>
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CartID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CoverImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CartID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoverImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-           @*  <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td> *@
-        </tr>
+                        <form method="post" asp-controller="Cart" asp-action="ConfirmOrder" class="d-inline">
+                            <input type="hidden" name="cartId" value="@item.CartID" />
+                            <button type="submit" class="btn btn-success">Confirm Order</button>
+                        </form>
+                        <form method="post" asp-controller="Cart" asp-action="RemoveFromCart" class="d-inline">
+                            <input type="hidden" name="cartId" value="@item.CartID" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <p>No items in the cart.</p>
+}
+
+@if (ViewBag.ErrorMsg != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMsg
+    </div>
+}

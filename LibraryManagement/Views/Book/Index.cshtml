@@ -1,8 +1,34 @@
 ﻿@model IEnumerable<LibraryManagement.Models.Book>
 
-@{
+@* @{
     ViewData["Title"] = "Index";
 }
+ *@
+@{
+    ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+
+    }
+}
+<div class="container">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Book" asp-action="Index" asp-route-pg="@pge"> @pge </a>
+                </li>
+            }
+        </ul>
+    }
 
 <h1>Books List</h1>
 

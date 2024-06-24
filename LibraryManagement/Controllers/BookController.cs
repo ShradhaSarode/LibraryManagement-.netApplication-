@@ -24,10 +24,26 @@ namespace LibraryManagement.Controllers
             env = e;
         }
         // GET: BookController
-        public ActionResult Index()
+        public ActionResult Index(int pg = 1)
         {
             var model = service.GetBook();
-            return View(model);
+            //return View(model);
+            const int pagesize = 5;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int recscount = model.Count();
+
+            var pager = new Pager(recscount, pg, pagesize);
+
+            int recskip = (pg - 1) * pagesize;
+
+            var data = model.Skip(recskip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+            return View(data);
         }
 
         // GET: BookController/Details/5
@@ -185,5 +201,7 @@ namespace LibraryManagement.Controllers
             ViewBag.SearchTerm = searchTerm;
             return View(model);
         }
+
+        
     }
 }

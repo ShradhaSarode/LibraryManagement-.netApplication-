@@ -16,3 +16,70 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.small-search-box {
+    width: 500px;
+}
+
+.custom-img-size {
+    width: 80%;
+    height: auto;
+}
+
+.cart-icon {
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
+
+/*for cart Count*/
+.cart-icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-icon {
+    width: 30px;
+    height: auto;
+}
+
+.cart-count {
+    position: absolute;
+    top: -15px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    border-radius: 50px;
+    padding: 3px;
+    font-size: 15px;
+    min-width: 12px;
+    text-align: center;
+}
+
+/*Stock Details*/
+.bg-light-success {
+    background-color: #d4edda;
+    .bg-light-danger
+
+{
+    background-color: #f8d7da;
+}

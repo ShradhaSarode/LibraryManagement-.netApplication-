@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LibraryManagement.Models.Orders>
+
+@{
+    ViewData["Title"] = "ListOfOrders";
+}
+
+<h1>ListOfOrders</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No orders found.</p>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        <h3>Order @order.OrderId</h3>
+        <p>User ID: @order.UserId</p>
+        <p>Order Date: @order.OrderDate</p>
+        <p>Total Amount: @order.TotalAmount</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>BookID</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (order.OrderItems != null)
+                {
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.BookID</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price</td>
+                            <td>@item.OrderStatus?.Status</td>
+                            <td>
+                                <form asp-action="UpdateOrderStatus" asp-controller="Cart" method="post">
+                                    <input type="hidden" name="orderItemId" value="@item.OrderItemID" />
+                                    <select name="orderStatusId">
+                                        @foreach (var status in ViewBag.OrderStatuses)
+                                        {
+                                            <option value="@status.Value">@status.Text</option>
+                                        }
+                                    </select>
+                                    <button type="submit">Update Status</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No items found for this order.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

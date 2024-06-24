@@ -63,7 +63,7 @@
                         <button type="submit" class="btn btn-danger">Deactivate</button>
                     </form> *@
 
-                    <form asp-controller="Users" asp-action="UpdateStatus" method="post">
+                    @* <form asp-controller="Users" asp-action="UpdateStatus" method="post">
                         <input type="hidden" name="userId" value="@item.UserID" />
                         <input type="hidden" name="isActive" value="1" />
                         <button type="submit" class="btn btn-success">Activate</button>
@@ -72,8 +72,24 @@
                         <input type="hidden" name="userId" value="@item.UserID" />
                         <input type="hidden" name="isActive" value="0" />
                         <button type="submit" class="btn btn-danger">Deactivate</button>
-                    </form>
+                    </form> *@
 
+                    @if (item.IsActive == 1)
+                    {
+                        <form asp-controller="User" asp-action="UpdateStatus" method="post" style="display:inline-block">
+                            <input type="hidden" name="userId" value="@item.UserID" />
+                            <input type="hidden" name="isActive" value="0" />
+                            <button type="submit" class="btn btn-danger">Deactivate</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="User" asp-action="UpdateStatus" method="post" style="display:inline-block">
+                            <input type="hidden" name="userId" value="@item.UserID" />
+                            <input type="hidden" name="isActive" value="1" />
+                            <button type="submit" class="btn btn-success">Activate</button>
+                        </form>
+                    }  
             </td>
         </tr>
 }
